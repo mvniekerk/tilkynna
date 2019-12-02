@@ -4,12 +4,21 @@
 # License MIT: https://opensource.org/licenses/MIT
 # **************************************************
 #
+
+only-tags: &only-tags
+  filters:
+    tags:
+      only: /^.*/
+    branches:
+      ignore: /.*/
+
 version: 2
-executorType: machine
+# NOTE: Several steps have been written to run in a machine executor
+# the main reason is that the maven build for sonarqube and unit tests
+# use [TestContainers](https://www.testcontainers.org/)
 jobs:
   static-analysis:
-    docker:
-      - image: maven:3.5.3-jdk-8-alpine
+    machine: true
     working_directory: ~/build
     environment:
       # Customize the JVM maximum heap limit
@@ -39,8 +48,7 @@ jobs:
       - store_artifacts:
           path:  target
   test:
-    docker:
-      - image: maven:3.5.3-jdk-8-alpine
+    machine: true
     working_directory: ~/build
     
     environment:
@@ -77,8 +85,7 @@ jobs:
           key: tilkynna-build-lic-2-{{ checksum "pom.xml" }} -f pom-rat.xml
       - run: mvn clean -f pom-rat.xml license:check
   docker-build:
-    docker:
-      - image: docker:18.09
+    machine: true
     working_directory: ~/build
     steps:
       - checkout
@@ -86,17 +93,15 @@ jobs:
           DOCKER_TAG=branch-build 
           echo "running docker build script" && pwd && ./scripts/docker-build.sh $REPO $IMAGE_NAME $DOCKER_TAG
   docker-build-push:
-    docker:
-      - image: docker:18.09
+    machine: true
     working_directory: ~/build
     steps:
       - checkout
       - run: |
-          DOCKER_TAG=0.8.3
+          DOCKER_TAG=$CIRCLE_TAG
           echo "running docker build script" && pwd && ./scripts/docker-build-and-push.sh $REPO $IMAGE_NAME $DOCKER_TAG $DOCKER_REPO_HOST $DOCKER_USER $DOCKER_PASS
   fossa-scan:
-    docker:
-      - image: golang:1.10.0-stretch
+    machine: true
     working_directory: ~/dokuti-build
     steps:
       # Install Fossa
@@ -110,16 +115,54 @@ jobs:
       - run: FOSSA_API_KEY=$FOSSA_API_KEY fossa analyze
       # Note: The 'fossa test' command must be run after the analyze command has been run, as it is dependent on the previous scan.
       - run: fossa test
+
+  generate-axios-client:
+    docker:
+       - image: openapitools/openapi-generator-cli:latest
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - run: mkdir ~/repo/tilkynna-typescript-axios
+      - run: /usr/local/bin/docker-entrypoint.sh generate -i ~/repo/doc/tilkynna_api.yml -g typescript-axios -o ~/repo/tilkynna-typescript-axios --model-package=model --api-package=api --additional-properties=withSeparateModelsAndApi=true,modelPropertyNaming=camelCase,npmName=@grindrodbank/tilkynna-api
+      - persist_to_workspace:
+          root: ~/repo
+          paths:
+            - tilkynna-typescript-axios
+
+  publish-axios-client:
+    working_directory: ~/repo
+    docker:
+      - image: circleci/node:lts-jessie-browsers-legacy
+    steps:
+      - attach_workspace:
+          at: ~/repo/workspace
+      - run:
+          name: update-npm
+          command: 'sudo npm install -g npm@latest'
+      - run:
+          name: Authenticate with registry
+          command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/repo/workspace/tilkynna-typescript-axios/.npmrc
+      - run:
+          name: Add node modules to the NPM ignore file.
+          command: echo 'node_modules/' >> ~/repo/workspace/tilkynna-typescript-axios/.npmignore
+      - run:
+          name: Run Yarn
+          command: cd ~/repo/workspace/tilkynna-typescript-axios && yarn
+      - run:
+          name: Build with Yarn
+          command: cd ~/repo/workspace/tilkynna-typescript-axios && yarn build
+      - run:
+          name: Publish to NPM with Yarn.
+          command: cd ~/repo/workspace/tilkynna-typescript-axios && yarn publish --access public
+
 workflows:
   version: 2
-  build_test_and_push:
+  untagged_build_and_test:
     jobs:
       - test
       - static-analysis
       - fossa-scan:
           filters:
-            tags:
-              only: /^v*.*.*/
             branches:
               only: master
       - license-headers
@@ -128,16 +171,32 @@ workflows:
           - test
           - static-analysis
           - license-headers
-          filters:
-            branches:
-              ignore: master
+      - generate-axios-client
+
+  tagged_build_push:
+    jobs:
+      - test: *only-tags
+      - static-analysis:
+          requires:
+          - test
+          <<: *only-tags
+      - license-headers: *only-tags
+      - fossa-scan: *only-tags
+      - generate-axios-client: *only-tags
       - docker-build-push:
           requires:
           - test
           - static-analysis
           - license-headers
-          filters:
-            tags:
-              only: /^v*.*.*/
-            branches:
-              only: master
+          - fossa-scan
+          - generate-axios-client
+          <<: *only-tags
+      - publish-axios-client:
+          requires:
+          - test
+          - static-analysis
+          - license-headers
+          - fossa-scan
+          - generate-axios-client
+          - docker-build-push
+          <<: *only-tags
