@@ -26,17 +26,6 @@ ALTER SCHEMA _reports OWNER TO postgres;
 --SET search_path TO pg_catalog,public,_reports;
 -- ddl-end --
 
-CREATE EXTENSION IF NOT EXISTS "pgcrypto";    
-
--- object: pgcrypto | type: EXTENSION --
--- DROP EXTENSION IF EXISTS pgcrypto CASCADE;
---CREATE EXTENSION pgcrypto
---      WITH SCHEMA public
---      VERSION '1.3';
--- ddl-end --
-COMMENT ON EXTENSION pgcrypto IS 'cryptographic functions';
--- ddl-end --
-
 -- object: _reports.template | type: TABLE --
 -- DROP TABLE IF EXISTS _reports.template CASCADE;
 CREATE TABLE _reports.template (
