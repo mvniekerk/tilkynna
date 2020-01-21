@@ -2,16 +2,10 @@ applications:
    - fullname: tilkynna
      applicationFunctions:
       - name: tilkynna.applicationMaintenance
-        description: Functionality to maintain applications within tilkynna.
+        description: Functionality to maintain reports, report templates, report datasources, report distionation and report lookups  within tilkynna.
         permissions:
           - name: tilkynna.report.read
             description: View a list of reports. 
-          - name: tilkynna.report.create
-            description: Create a new report. 
-          - name: tilkynna.report.update
-            description: Updates a report. 
-          - name: tilkynna.report.delete
-            description: Delete a report.
             
           - name: tilkynna.report.template.read
             description: View a list of report templatess. 
@@ -21,6 +15,11 @@ applications:
             description: Updates a report template. 
           - name: tilkynna.report.template.delete
             description: Delete a report template.
+
+          - name: tilkynna.report.template.tags.create
+            description: Create a new report template tags. 
+          - name: tilkynna.report.template.tags.delete
+            description: Delete a report template tags.
 
           - name: tilkynna.report.datasource.read
             description: View a list of report datasources. 
@@ -42,12 +41,7 @@ applications:
 
           - name: tilkynna.lookup.read
             description: View a list of lookups. 
-          - name: tilkynna.lookup.create
-            description: Create a new lookup. 
-          - name: tilkynna.lookup.update
-            description: Updates a lookup. 
-          - name: tilkynna.lookup.delete
-            description: Delete a lookup.             
+         
         
 clients:
   - clientId: tilkynna-test-client
@@ -105,13 +99,12 @@ defaultConfigurations:
             description: "A function that contains all possible permissions within the tilkynna micro-service."
             permissions:
               - tilkynna.report.read
-              - tilkynna.report.create
-              - tilkynna.report.update
-              - tilkynna.report.delete
               - tilkynna.report.template.read
               - tilkynna.report.template.create
               - tilkynna.report.template.update
               - tilkynna.report.template.delete
+              - tilkynna.report.template.tags.create
+              - tilkynna.report.template.tags.delete
               - tilkynna.report.datasource.read
               - tilkynna.report.datasource.create
               - tilkynna.report.datasource.update
@@ -121,16 +114,11 @@ defaultConfigurations:
               - tilkynna.report.destination.update
               - tilkynna.report.destination.delete
               - tilkynna.lookup.read
-              - tilkynna.lookup..create
-              - tilkynna.lookup..update
-              - tilkynna.lookup..delete
+
           - name: "tilkynna.User"
             description: "A function that contains all application related permissions within the tilkynna micro-service."
             permissions:
               - tilkynna.report.read
-              - tilkynna.report.template.read
-              - tilkynna.report.datasource.read
-              - tilkynna.report.destination.read
               - tilkynna.lookup.read
 
     roles:
