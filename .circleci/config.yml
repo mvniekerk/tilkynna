@@ -37,6 +37,7 @@ jobs:
          mvn clean
          mvn org.jacoco:jacoco-maven-plugin:prepare-agent \
             package \
+            org.jacoco:jacoco-maven-plugin:report \
             sonar:sonar \
                 -Dsonar.host.url=https://sonarcloud.io \
                 -Dsonar.projectKey=$SONAR_PROJECT_KEY \
@@ -44,7 +45,7 @@ jobs:
                 -Dsonar.login=$SONAR_AUTH_TOKEN \
                 -Dsonar.branch.name=$CIRCLE_BRANCH \
                 -Dsonar.exclusions=srcgen/**/*,src/test/**/* \
-                -Dsonar.jacoco.reportPaths=target/jacoco.exec
+                -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
       - store_artifacts:
           path:  target
   test:
