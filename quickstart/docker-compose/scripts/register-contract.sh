@@ -1,4 +1,10 @@
 #/bin/sh
+#
+# *************************************************
+# Copyright (c) 2019, Grindrod Bank Limited
+# License MIT: https://opensource.org/licenses/MIT
+# **************************************************
+#
 export A3S_IDENTITY_SERVER_BASE_URL=http://a3s-identity-server
 export A3S_BASE_URL=http://a3s:80
 export A3S_USERNAME="a3s-bootstrap-admin"
