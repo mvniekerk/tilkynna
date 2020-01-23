@@ -15,10 +15,10 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @Configuration
 @EnableWebSecurity
 @ConditionalOnProperty(prefix = "rest.security", value = "enabled", havingValue = "false")
-public class DisableSecurity extends WebSecurityConfigurerAdapter{
+public class DisableSecurity extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests().antMatchers("/").permitAll();
-        http.csrf().disable() .authorizeRequests() .anyRequest().permitAll(); 
+        http.csrf().disable().authorizeRequests().anyRequest().permitAll();
     }
 }

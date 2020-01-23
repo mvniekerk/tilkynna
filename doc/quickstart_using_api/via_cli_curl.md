@@ -19,9 +19,9 @@ TOKEN=`curl \
 -X POST http://localhost:80/connect/token \
 -H 'Content-Type: application/x-www-form-urlencoded' \
 -H 'cache-control: no-cache' \
--d 'grant_type=password&username=tilkynna-admin&password=Password1#&client_id=tylkinna-test-client&client_secret=secret&scope=tilkynna' \
+-d 'grant_type=password&username=tilkynna-admin&password=Password1#&client_id=tilkynna-test-client&client_secret=secret&scope=tilkynna' \
 | jq '.access_token' -r` \
-&& echo "TOKEN is :$TOKEN"
+&& echo "TOKEN is: $TOKEN"
 ```
 
 
