@@ -62,7 +62,6 @@ rest:
   security:
     # This property toggles whether Oauth 2.0 based security is enabled. A 'disabled' value removes all security.
     enabled: true
-    issuerUri: "http://localhost:8180/auth/realms/Tilkynna"
     apiMatcher: "/**"
     cors:
       allowedOrigins: "*"
@@ -75,10 +74,10 @@ security:
   oauth2:
     resource:
       id: tilkynna
-      tokenInfoUri: ${rest.security.issuerUri}/protocol/openid-connect/token/introspect
-      userInfoUri: ${rest.security.issuerUri}/protocol/openid-connect/userinfo
       jwt:
-        keyValue: "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAmulcajWJq15GpDmlfwVDw94vOnrk3TS/GP4S8wZvbulZbGna1kFR1usHiz4CXWE6xb9s2D820crj2ERsubNbe6GLNLynLDUui85QcHQhvb8wXUvq9+d4SckYpLujys//qU77AuhC7Xbutw8+UC8qlw0niF3kbLnx2rCpN0cbad6T0uFBRbAvS8EwHDm1Ta/em+VXoPQE3baQoawSMRjSnuxB2JAnof8fijxGPRQhxnQGUa1bwh7lgV2ClPGZ6WfzW25yInQY8Yni0bKJ0vsR/NgetB1JOLFiAgoFRn5IHbft4Hv+tVLBAsZRnhuu8mXtNY8YNiaLVM2FuuSg/EHOrwIDAQAB\n-----END PUBLIC KEY-----"
+        keyValue: "-----BEGIN PUBLIC KEY-----\nMIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEA1fD6YzaIslie1AQpdyDYyrukqjo4/71G9Us++fDTLMOujuJBgDF2A0p1cvEpc8r3fzwJq2wxfJDXotRp9X/81jDv/uxyO7ifhGcAbxg/wVEz4YmQE5bXFM0IEMhU1VDE17i0CTiwe2WV6G69JSAm7xMChl284zSCZOhlALe25mBg0zkTfmcZIUdkloBsWe94FNsQ0IljLyRiwoEZO0Xrp91eUrUvQm6He3X716zIg+YUzoWk+KVNHuL+pk6Aefy1c+yFia57MTA384ORh8MiGRZ9YuM69uB6oPkFHkwFNWbDW9G+yzcpcXsc0BdQVwsZ9liHbkgRHGthbeC7euG3THEJkaZXAInr2mwcyaNHzCQIOo6cngNOU5S3pLnHNyEM1FG40AYhRj8/uwJ4e//uBbBOUvg7Fo5cnG4FOWLIN35sQUQvht30h+UmG/lb4ualkx/GkDOfyTwejqt2mTLWkblV3vekX7uI+h4M1lFebpAKF602r3qK80PNgPS56BwjGSxLhfllxhN6nhbjPZtaiTfFu0mFTHkRPEo7t2ThDBFMZ7EeA6Ot46MS1D/t+HwjlJ/vnZAH3RcdyUQgp4wJeCJQkd26XlaU5MT3jCFLMj1RLLVhif90gj2mCN+kO/wnSRH3jrrKL5nbgUJNL38D+1RVAfywEdeijIZCbvExC18CAwEAAQ==\n-----END PUBLIC KEY-----"
+
+
 
 # This setting exposes all the actuator routes, some of which expose sensitive info. Ensure that only the /health route is exposed
 # publically for readiness and liveness probes in non-dev environments.

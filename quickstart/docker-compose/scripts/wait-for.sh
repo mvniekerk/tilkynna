@@ -1,6 +1,20 @@
 #!/bin/sh
+#
+# *************************************************
+# Copyright Grindrod Bank Limited 2019, All Rights Reserved.
+# **************************************************
+# NOTICE:  All information contained herein is, and remains
+# the property of Grindrod Bank Limited.
+# The intellectual and technical concepts contained
+# herein are proprietary to Grindrod Bank Limited
+# and are protected by trade secret or copyright law.
+# Use, dissemination or reproduction of this information/material
+# is strictly forbidden unless prior written permission is obtained
+# from Grindrod Bank Limited.
+#
 
-TIMEOUT=25
+
+TIMEOUT=15
 QUIET=0
 
 echoerr() {
@@ -77,3 +91,5 @@ if [ "$HOST" = "" -o "$PORT" = "" ]; then
 fi
 
 wait_for "$@"
+
+

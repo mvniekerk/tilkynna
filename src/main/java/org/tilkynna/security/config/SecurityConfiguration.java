@@ -6,7 +6,6 @@
  */
 package org.tilkynna.security.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties;
@@ -43,18 +42,18 @@ public class SecurityConfiguration extends ResourceServerConfigurerAdapter {
 
     @Override
     public void configure(final HttpSecurity http) throws Exception {
-        http.cors() //
-                .configurationSource(corsConfigurationSource()) //
-                .and() //
-                .headers() //
-                .frameOptions() //
-                .disable() //
-                .and() //
-                .csrf() //
-                .disable() //
-                .authorizeRequests() //
-                .antMatchers("/actuator/*").permitAll() //
-                .antMatchers(securityProperties.getApiMatcher()).authenticated();
+        http.cors()
+            .configurationSource(corsConfigurationSource())
+            .and()
+            .headers()
+            .frameOptions()
+            .disable()
+            .and()
+            .csrf()
+            .disable()
+            .authorizeRequests()
+            .antMatchers("/actuator/*").permitAll()
+            .antMatchers(securityProperties.getApiMatcher()).authenticated();
     }
 
     @Bean
@@ -64,10 +63,5 @@ public class SecurityConfiguration extends ResourceServerConfigurerAdapter {
             source.registerCorsConfiguration("/**", securityProperties.getCorsConfiguration());
         }
         return source;
-    }
-
-    @Bean
-    public JwtAccessTokenCustomizer jwtAccessTokenCustomizer(ObjectMapper mapper) {
-        return new JwtAccessTokenCustomizer(mapper);
     }
 }

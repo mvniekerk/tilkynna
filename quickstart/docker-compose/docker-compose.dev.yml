@@ -8,7 +8,8 @@
 version: '3'
 services:
   web:
-    image:  grindrodbank/tilkynna:latest
+    build: 
+     context: ../../
     ports:
      - "9981:9981"
     # JMX port you will also need to include the JAVA_OPTS environment variable 
@@ -104,8 +105,4 @@ services:
     
 networks:
   tilkynna-quickstart:
-  
-  
-  
-  
-          
+    

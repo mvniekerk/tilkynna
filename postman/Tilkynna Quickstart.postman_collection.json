@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "1364675a-377f-4b60-b143-ad7893e4cdf0",
+		"_postman_id": "5c3cd530-3403-4b81-b25e-dc9728175b11",
 		"name": "Tilkynna Quickstart",
 		"description": "Postman collection for interacting with the Tilkynna service, an enterprise grade utility-style report server.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -15,25 +15,32 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "abae20ae-67c5-4864-86b2-2a6c7ad1374f",
+								"id": "7c5b79eb-dff1-4dee-bfda-9da489ae5edb",
 								"exec": [
-									"pm.test(\"Check Access Token was returned. Set session_access_token environment variable.\", function () {",
+									"pm.test(\"Set session_access_token environment variable.\", function () {",
 									"    var jsonData = pm.response.json();",
 									"    pm.expect(jsonData).to.have.property('access_token');",
 									"    pm.environment.set(\"session_access_token\", jsonData.access_token);",
+									"    pm.expect(jsonData.access_token.length).to.be.above(12);",
 									"    console.log(\"Access Token:\"+jsonData.access_token);",
-									"});"
+									"});",
+									""
 								],
 								"type": "text/javascript"
 							}
 						}
 					],
 					"request": {
+						"auth": {
+							"type": "noauth"
+						},
 						"method": "POST",
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/x-www-form-urlencoded"
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
 							}
 						],
 						"body": {
@@ -46,37 +53,38 @@
 								},
 								{
 									"key": "username",
-									"value": "test-user",
+									"value": "tilkynna-admin",
 									"type": "text"
 								},
 								{
 									"key": "password",
-									"value": "test-user",
+									"value": "Password1#",
 									"type": "text"
 								},
 								{
 									"key": "client_id",
-									"value": "tilkynna",
+									"value": "tilkynna-test-client",
 									"type": "text"
 								},
 								{
 									"key": "client_secret",
-									"value": "{{TILKYNNA_CLIENT_SECRET}}",
+									"value": "secret",
+									"type": "text"
+								},
+								{
+									"key": "scope",
+									"value": "tilkynna",
 									"type": "text"
 								}
 							]
 						},
 						"url": {
-							"raw": "{{KEYCLOAK_BASE_URL}}/auth/realms/{{KEYCLOAK-REALM}}/protocol/openid-connect/token",
+							"raw": "{{auth-server-base-url}}/connect/token",
 							"host": [
-								"{{KEYCLOAK_BASE_URL}}"
+								"{{auth-server-base-url}}"
 							],
 							"path": [
-								"auth",
-								"realms",
-								"{{KEYCLOAK-REALM}}",
-								"protocol",
-								"openid-connect",
+								"connect",
 								"token"
 							]
 						}
@@ -105,7 +113,8 @@
 						]
 					}
 				}
-			]
+			],
+			"protocolProfileBehavior": {}
 		},
 		{
 			"name": "Quickstart Steps",
@@ -147,7 +156,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"name\": \"tilkynna db\",\n  \"description\": \"tilkynna db\",\n  \"connection\": {\n    \"driver\": \"org.postgresql.Driver\",\n    \"url\": \"jdbc:postgresql://<change_me>:5432/tilkynna\",\n    \"username\": \"postgres\",\n    \"password\": \"postgres\"\n  }\n}"
+							"raw": "{\n  \"name\": \"tilkynna db\",\n  \"description\": \"tilkynna db\",\n  \"connection\": {\n    \"driver\": \"org.postgresql.Driver\",\n    \"url\": \"jdbc:postgresql://{{tilkynna db_host}}:5432/tilkynna\",\n    \"username\": \"postgres\",\n    \"password\": \"postgres\"\n  }\n}"
 						},
 						"url": {
 							"raw": "{{host}}:{{port}}/datasources",
@@ -194,8 +203,8 @@
 							"formdata": [
 								{
 									"key": "file",
-									"type": "file",
-									"src": ""
+									"value": "",
+									"type": "file"
 								},
 								{
 									"key": "templateName",
@@ -260,7 +269,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"destinationType\": \"SFTP\",\n  \"host\": \"<change_me>\",\n  \"port\": \"22\",\n  \"path\" : \"/upload\",\n  \"user\": \"foo\",\n  \"password\": \"pass\",\n  \"header\": {\n    \"name\": \"SFTP server\",\n    \"description\": \"our shared sftp server\",\n    \"securityProtocol\": \"ssl\",\n    \"timeout\": 100000,\n    \"downloadable\": false\n  }\n}"
+							"raw": "{\n  \"destinationType\": \"SFTP\",\n  \"host\": \"{{tilkynna sftp_host}}\",\n  \"port\": \"22\",\n  \"path\" : \"/upload\",\n  \"user\": \"foo\",\n  \"password\": \"pass\",\n  \"header\": {\n    \"name\": \"SFTP server\",\n    \"description\": \"our shared sftp server\",\n    \"securityProtocol\": \"ssl\",\n    \"timeout\": 100000,\n    \"downloadable\": false\n  }\n}"
 						},
 						"url": {
 							"raw": "{{host}}:{{port}}/destinations",
@@ -346,10 +355,6 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{host}}:{{port}}/reports/{{tilkynnaSampleReportCorrelationId}}/status",
 							"host": [
@@ -387,7 +392,8 @@
 						]
 					}
 				}
-			]
+			],
+			"protocolProfileBehavior": {}
 		},
 		{
 			"name": "DATASOURCES",
@@ -413,10 +419,6 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{host}}:{{port}}/lookups/drivers",
 							"host": [
@@ -452,10 +454,6 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{host}}:{{port}}/lookups/connectionTypes",
 							"host": [
@@ -512,7 +510,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"name\": \"Tilkynna2\",\n  \"description\": \"add another datasource for Tilkynna\",\n  \"connection\": {\n    \"driver\": \"org.postgresql.Driver\",\n    \"url\": \"jdbc:postgresql://<change_me>:5432/tilkynna\",\n    \"username\": \"postgres\",\n    \"password\": \"postgres\"\n  }\n}"
+							"raw": "{\n  \"name\": \"Tilkynna2\",\n  \"description\": \"add another datasource for Tilkynna\",\n  \"connection\": {\n    \"driver\": \"org.postgresql.Driver\",\n    \"url\": \"jdbc:postgresql://{{tilkynna db_host}}:5432/tilkynna\",\n    \"username\": \"postgres\",\n    \"password\": \"postgres\"\n  }\n}"
 						},
 						"url": {
 							"raw": "{{host}}:{{port}}/datasources",
@@ -548,10 +546,6 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{host}}:{{port}}/datasources",
 							"host": [
@@ -577,7 +571,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n \n    \"driver\": \"org.postgresql.Driver\",\n    \"url\": \"jdbc:postgresql://<change_me>:5432/tilkynna\",\n    \"username\": \"postgres\",\n    \"password\": \"postgres\"\n}"
+							"raw": "{\n \n    \"driver\": \"org.postgresql.Driver\",\n    \"url\": \"jdbc:postgresql://{{tilkynna db_host}}:5432/tilkynna\",\n    \"username\": \"postgres\",\n    \"password\": \"postgres\"\n}"
 						},
 						"url": {
 							"raw": "{{host}}:{{port}}/datasources/validate",
@@ -704,7 +698,8 @@
 						]
 					}
 				}
-			]
+			],
+			"protocolProfileBehavior": {}
 		},
 		{
 			"name": "DESTINATIONS",
@@ -738,10 +733,6 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{host}}:{{port}}/destinations",
 							"host": [
@@ -787,7 +778,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"destinationType\": \"SFTP\",\n  \"host\": \"localhost\",\n  \"port\": \"22\",\n  \"path\" : \"/upload\",\n  \"user\": \"foo\",\n  \"password\": \"pass\",\n  \"header\": {\n    \"name\": \"The sftp server 22\",\n    \"description\": \"our shared sftp server\",\n    \"securityProtocol\": \"ssl\",\n    \"timeout\": 100000,\n    \"downloadable\": false\n  }\n}"
+							"raw": "{\n  \"destinationType\": \"SFTP\",\n  \"host\": \"{{tilkynna sftp_host}}\",\n  \"port\": \"22\",\n  \"path\" : \"/upload\",\n  \"user\": \"foo\",\n  \"password\": \"pass\",\n  \"header\": {\n    \"name\": \"The sftp server 22\",\n    \"description\": \"our shared sftp server\",\n    \"securityProtocol\": \"ssl\",\n    \"timeout\": 100000,\n    \"downloadable\": false\n  }\n}"
 						},
 						"url": {
 							"raw": "{{host}}:{{port}}/destinations",
@@ -920,7 +911,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"destinationType\": \"SFTP\",\n  \"host\": \"changed_host\",\n  \"port\": \"22\",\n  \"path\" : \"/changed_folder\",\n  \"user\": \"changed_user\",\n  \"password\": \"changed_password\",\n  \"header\": {\n    \"name\": \"changed_name\",\n    \"description\": \"changed_description\",\n    \"securityProtocol\": \"ssl\",\n    \"timeout\": 100000,\n    \"downloadable\": false\n  }\n}"
+							"raw": "{\n  \"destinationType\": \"SFTP\",\n  \"host\": \"{{tilkynna sftp_host}}\",\n  \"port\": \"22\",\n  \"path\" : \"/changed_folder\",\n  \"user\": \"changed_user\",\n  \"password\": \"changed_password\",\n  \"header\": {\n    \"name\": \"changed_name\",\n    \"description\": \"changed_description\",\n    \"securityProtocol\": \"ssl\",\n    \"timeout\": 100000,\n    \"downloadable\": false\n  }\n}"
 						},
 						"url": {
 							"raw": "{{host}}:{{port}}/destinations/{{sftpDestinationId2}}",
@@ -958,7 +949,8 @@
 						]
 					}
 				}
-			]
+			],
+			"protocolProfileBehavior": {}
 		},
 		{
 			"name": "TEMPLATES",
@@ -984,10 +976,6 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{host}}:{{port}}/templates",
 							"host": [
@@ -1028,10 +1016,6 @@
 								"value": "application/json"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{host}}:{{port}}/templates/{{tilkynnaSampleReportTemplateId}}",
 							"host": [
@@ -1084,8 +1068,8 @@
 							"formdata": [
 								{
 									"key": "file",
-									"type": "file",
-									"src": ""
+									"value": "",
+									"type": "file"
 								},
 								{
 									"key": "templateName",
@@ -1150,10 +1134,6 @@
 								"value": "application/json"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{host}}:{{port}}/lookups/tags",
 							"host": [
@@ -1200,10 +1180,6 @@
 								"value": "application/json"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{host}}:{{port}}/lookups/tags?filterTag=2",
 							"host": [
@@ -1341,7 +1317,8 @@
 						]
 					}
 				}
-			]
+			],
+			"protocolProfileBehavior": {}
 		},
 		{
 			"name": "GENERATE_REPORT",
@@ -1369,10 +1346,6 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{host}}:{{port}}/destinations",
 							"host": [
@@ -1443,10 +1416,6 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{host}}:{{port}}/reports/{{correlationId}}/status",
 							"host": [
@@ -1467,10 +1436,6 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{host}}:{{port}}/reports/{{correlationId}}",
 							"host": [
@@ -1611,7 +1576,8 @@
 						]
 					}
 				}
-			]
+			],
+			"protocolProfileBehavior": {}
 		}
 	],
 	"auth": {
@@ -1650,5 +1616,6 @@
 				]
 			}
 		}
-	]
+	],
+	"protocolProfileBehavior": {}
 }

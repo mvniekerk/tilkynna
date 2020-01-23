@@ -296,7 +296,7 @@ CREATE TABLE _reports.generated_report (
 
 );
 -- ddl-end --
-COMMENT ON COLUMN _reports.generated_report.requested_by IS 'The uuid of the users (in KeyCloak) logged in and requesting the report';
+COMMENT ON COLUMN _reports.generated_report.requested_by IS 'The uuid of the users (in A3S) logged in and requesting the report';
 -- ddl-end --
 COMMENT ON COLUMN _reports.generated_report.request_body IS 'JSON of the request body to be used for generating this report';
 -- ddl-end --

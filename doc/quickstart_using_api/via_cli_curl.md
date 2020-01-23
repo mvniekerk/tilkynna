@@ -15,15 +15,15 @@
 
 ```bash
 TOKEN=`curl \
--s \
--X POST http://localhost:9191/auth/realms/Tilkynna/protocol/openid-connect/token \
+-s -v \
+-X POST http://localhost:80/connect/token \
 -H 'Content-Type: application/x-www-form-urlencoded' \
--H 'Bearer-Token: 575c92bb-33fe-45b8-85ef-7cc5710e62eb' \
 -H 'cache-control: no-cache' \
--d 'grant_type=password&username=test-user&password=test-user&client_id=tilkynna&client_secret=ee5c1c57-bf2f-43e6-9025-49344113c88d' \
+-d 'grant_type=password&username=tilkynna-admin&password=Password1#&client_id=tylkinna-test-client&client_secret=secret&scope=tilkynna' \
 | jq '.access_token' -r` \
-&& echo "TOKEN is: $TOKEN"
+&& echo "TOKEN is :$TOKEN"
 ```
+
 
 * Create a data source 
 We use the Tilkynna database for this sample report.

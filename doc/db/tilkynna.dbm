@@ -3,7 +3,7 @@
 CAUTION: Do not modify this file unless you know what you are doing.
          Unexpected results may occur if the code is changed deliberately.
 -->
-<dbmodel pgmodeler-ver="0.9.2-alpha1" last-position="0,64" last-zoom="1" max-obj-count="20"
+<dbmodel pgmodeler-ver="0.9.2-beta" last-position="0,0" last-zoom="1" max-obj-count="20"
 	 default-owner="postgres">
 <database name="tilkynna" encoding="UTF8" is-template="false" allow-conns="true">
 	<role name="postgres"/>
@@ -393,7 +393,7 @@ FINISHED_REMOTE: processing for generating the report to any destination other t
 	</column>
 	<column name="requested_by" not-null="true">
 		<type name="uuid" length="0"/>
-		<comment><![CDATA[The uuid of the users (in KeyCloak) logged in and requesting the report]]></comment>
+		<comment><![CDATA[The uuid of the users (in A3S) logged in and requesting the report]]></comment>
 	</column>
 	<column name="requested_at" not-null="true">
 		<type name="timestamptz" length="0"/>
