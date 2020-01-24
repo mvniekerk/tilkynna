@@ -103,7 +103,7 @@ jobs:
           echo "running docker build script" && pwd && ./scripts/docker-build-and-push.sh $REPO $IMAGE_NAME $DOCKER_TAG $DOCKER_REPO_HOST $DOCKER_USER $DOCKER_PASS
   fossa-scan:
     machine: true
-    working_directory: ~/dokuti-build
+    working_directory: ~/tilkynna-build
     steps:
       # Install Fossa
       - run: |
