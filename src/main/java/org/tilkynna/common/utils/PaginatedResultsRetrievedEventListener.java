@@ -12,6 +12,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -71,10 +72,11 @@ public class PaginatedResultsRetrievedEventListener implements ApplicationListen
             pageResponse.setPrev(prevBuilder.toUriString());
         }
 
-        UriComponentsBuilder firstBuilder = replacePageParams(original, new PageRequest(0, tagsPage.getSize()));
+        UriComponentsBuilder firstBuilder = replacePageParams(original, PageRequest.of(0, tagsPage.getSize()));
         pageResponse.setFirst(firstBuilder.toUriString());
 
-        UriComponentsBuilder lastBuilder = replacePageParams(original, new PageRequest(tagsPage.getTotalPages() - 1, tagsPage.getSize()));
+        
+        UriComponentsBuilder lastBuilder = replacePageParams(original, PageRequest.of(tagsPage.getTotalPages() - 1, tagsPage.getSize()));
         pageResponse.setLast(lastBuilder.toUriString());
 
         try {

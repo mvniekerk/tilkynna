@@ -7,6 +7,7 @@
 package org.tilkynna.common.utils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,7 +37,7 @@ public class ParseOrderByQueryParam {
     }
 
     public static Sort resolveArgument(List<String> orderBy, String defaultSortField) {
-        Sort defaultSort = new Sort(Direction.ASC, defaultSortField);
+        Sort defaultSort = Sort.by(Arrays.asList(new Order(Direction.ASC, defaultSortField)));
 
         // work around for odd codegen issue, not allowing arrays to be null
         orderBy = (orderBy != null && orderBy.get(0).contains("new ArrayList<>()")) ? null : orderBy;
