@@ -25,7 +25,7 @@ services:
       - a3s-identity-server
     command: ["./wait-for.sh", "postgresql:5432", "--", "Echo 'DB is up. Good to proceed' "]
   postgresql:
-    image: "postgres:10.7-alpine"
+    image: "postgres:11-alpine"
     restart: always
     command: "-c 'config_file=/etc/postgresql/postgresql.conf'"
     ports:
@@ -50,7 +50,7 @@ services:
   a3s-postgresql:
     networks:
       - tilkynna-quickstart    
-    image: "postgres:10.7-alpine"
+    image: "postgres:11-alpine"
     restart: always
     ports:
       - "5478:5432"
