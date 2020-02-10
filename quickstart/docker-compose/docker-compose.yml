@@ -88,8 +88,15 @@ services:
       - 80:80
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+      - FLYWAY_ENABLE=true
+      - DATABASE_SERVER=a3s-postgresql
+      - DATABASE_NAME=identity_server
+      - DATABASE_PORT=5432
+      - FLYWAY_USER=postgres
+      - FLYWAY_PASSWORD=postgres
+      - FLYWAY_CONNECTION_RETRIES=5
     depends_on:
-      - a3s
+      - a3s-postgresql
 
   register-security-contract:
     networks:
@@ -104,8 +111,3 @@ services:
     
 networks:
   tilkynna-quickstart:
-  
-  
-  
-  
-          
