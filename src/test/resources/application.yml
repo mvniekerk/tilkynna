@@ -32,7 +32,7 @@ server:
 spring:
   datasource:
     initialization-mode: always
-    url: jdbc:tc:postgresql:10-alpine:///databasename?TC_INITSCRIPT=init_pg.sql
+    url: jdbc:tc:postgresql:11-alpine:///databasename?TC_INITSCRIPT=init_pg.sql
     driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
   flyway:
     enabled: true
