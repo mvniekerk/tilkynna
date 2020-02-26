@@ -1,0 +1,186 @@
+applications:
+   - fullname: tilkynna
+     applicationFunctions:
+      - name: tilkynna.applicationMaintenance
+        description: Functionality to maintain reports, report templates, report datasources, report distionation and report lookups  within tilkynna.
+        permissions:
+          - name: tilkynna.report.read
+            description: View a list of reports. 
+            
+          - name: tilkynna.report.template.read
+            description: View a list of report templatess. 
+          - name: tilkynna.report.template.create
+            description: Create a new report template. 
+          - name: tilkynna.report.template.update
+            description: Updates a report template. 
+          - name: tilkynna.report.template.delete
+            description: Delete a report template.
+
+          - name: tilkynna.report.template.tags.create
+            description: Create a new report template tags. 
+          - name: tilkynna.report.template.tags.delete
+            description: Delete a report template tags.
+
+          - name: tilkynna.report.datasource.read
+            description: View a list of report datasources. 
+          - name: tilkynna.report.datasource.create
+            description: Create a new report datasource. 
+          - name: tilkynna.report.datasource.update
+            description: Updates a report datasource. 
+          - name: tilkynna.report.datasource.delete
+            description: Delete a report datasource.
+
+          - name: tilkynna.report.destination.read
+            description: View a list of report destinations. 
+          - name: tilkynna.report.destination.create
+            description: Create a new report destination. 
+          - name: tilkynna.report.destination.update
+            description: Updates a report destination. 
+          - name: tilkynna.report.destination.delete
+            description: Delete a report destination.
+
+          - name: tilkynna.lookup.read
+            description: View a list of lookups. 
+         
+        
+clients:
+  - clientId: tilkynna-test-client
+    name: "tilkynna Test client"
+    allowedGrantTypes:
+      - authorization_code
+      - password
+    redirectUris:
+      - "https://www.getpostman.com/oauth2/callback"      
+      - "http://swagger-ui:8083/oauth2-redirect.html"
+    postLogoutRedirectUris:
+      - "https://www.getpostman.com"
+      - "http://swagger-ui:8083"
+    allowedCorsOrigins:
+      - "https://www.getpostman.com"
+      - "http://swagger-ui:8083"
+    allowedScopes:
+      - "openid"
+      - "profile"
+      - "tilkynna"
+    clientSecrets:
+      - "secret"
+    allowedOfflineAccess: true
+    
+  - clientId: tilkynna-ui-client
+    name: "TILKYNNA UI client"
+    allowedGrantTypes:
+      - authorization_code
+    redirectUris:
+      - "https://www.getpostman.com/oauth2/callback"
+      - "http://tilkynna-ui:9002/oauth2-redirect.html"
+      - "http://tilkynna-ui:9002/*"
+      - "http://tilkynna-ui:9002/"
+      - "http://tilkynna-ui:9002/oauth2-redirect"
+    postLogoutRedirectUris:
+      - "https://www.getpostman.com"
+      - "http://tilkynna-ui:9002"
+    allowedCorsOrigins:
+      - "https://www.getpostman.com"
+      - "http://tilkynna-ui:9002"
+    allowedScopes:
+      - "openid"
+      - "profile"
+      - "tilkynna"
+    clientSecrets:
+      - "secret"
+    allowedOfflineAccess: true         
+    
+defaultConfigurations:
+  - name: tilkynna default configuration
+    applications:
+      - name: tilkynna
+        functions:
+          - name: "tilkynna.Admin"
+            description: "A function that contains all possible permissions within the tilkynna micro-service."
+            permissions:
+              - tilkynna.report.read
+              - tilkynna.report.template.read
+              - tilkynna.report.template.create
+              - tilkynna.report.template.update
+              - tilkynna.report.template.delete
+              - tilkynna.report.template.tags.create
+              - tilkynna.report.template.tags.delete
+              - tilkynna.report.datasource.read
+              - tilkynna.report.datasource.create
+              - tilkynna.report.datasource.update
+              - tilkynna.report.datasource.delete
+              - tilkynna.report.destination.read
+              - tilkynna.report.destination.create
+              - tilkynna.report.destination.update
+              - tilkynna.report.destination.delete
+              - tilkynna.lookup.read
+
+          - name: "tilkynna.User"
+            description: "A function that contains all application related permissions within the tilkynna micro-service."
+            permissions:
+              - tilkynna.report.read
+              - tilkynna.lookup.read
+
+    roles:
+      - name: "tilkynna Admin"
+        description: An tilkynna Role that has all the tilkynna functions associated with it.
+        functions:
+          - "tilkynna.Admin"
+      - name: "tilkynna User"
+        description: An tilkynna Role for user level access.
+        functions:
+          - "tilkynna.User"
+    users:
+      - username: tilkynna-admin
+        name: tilkynna-admin
+        surname: system user
+        email: tilkynna-admin@localhost
+        password: "Password1#"
+        roles:
+          - "tilkynna Admin"
+      - username: tilkynna-admin2
+        name: tilkynna-admin2
+        surname: system user2
+        email: tilkynna-admin2@localhost
+        password: "Password1#"
+        roles:
+          - "tilkynna Admin"
+      - username: tilkynna-user
+        name: tilkynna-user
+        surname: system user
+        email: tilkynna-user@localhost
+        password: "Password1#"
+        roles:
+          - "tilkynna User"
+      - username: tilkynna-user2
+        name: tilkynna-user2
+        surname: system user
+        email: tilkynna-user2@localhost
+        password: "Password1#"
+        roles:
+          - "tilkynna User"          
+
+    teams:
+      - name: default-tilkynna-team
+        description: A simple test default team.
+        users:
+          - tilkynna-admin
+          - tilkynna-user
+      - name: tilkynna-admin-team
+        description: A simple test admin team.
+        users:
+          - tilkynna-admin       
+      - name: tilkynna-admin-team2
+        description: A simple test admin team.
+        users:
+          - tilkynna-admin2
+                              
+      - name: tilkynna-user-team
+        description: A simple test user team.
+        users:
+          - tilkynna-user
+      - name: tilkynna-user-team2
+        description: A simple test user team.
+        users:
+          - tilkynna-user2          
+          

@@ -37,6 +37,7 @@ jobs:
          mvn clean
          mvn org.jacoco:jacoco-maven-plugin:prepare-agent \
             package \
+            org.jacoco:jacoco-maven-plugin:report \
             sonar:sonar \
                 -Dsonar.host.url=https://sonarcloud.io \
                 -Dsonar.projectKey=$SONAR_PROJECT_KEY \
@@ -44,7 +45,7 @@ jobs:
                 -Dsonar.login=$SONAR_AUTH_TOKEN \
                 -Dsonar.branch.name=$CIRCLE_BRANCH \
                 -Dsonar.exclusions=srcgen/**/*,src/test/**/* \
-                -Dsonar.jacoco.reportPaths=target/jacoco.exec
+                -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
       - store_artifacts:
           path:  target
   test:
@@ -102,7 +103,7 @@ jobs:
           echo "running docker build script" && pwd && ./scripts/docker-build-and-push.sh $REPO $IMAGE_NAME $DOCKER_TAG $DOCKER_REPO_HOST $DOCKER_USER $DOCKER_PASS
   fossa-scan:
     machine: true
-    working_directory: ~/dokuti-build
+    working_directory: ~/tilkynna-build
     steps:
       # Install Fossa
       - run: |

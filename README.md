@@ -28,19 +28,25 @@ cd quickstart/docker-compose
 docker-compose -p tilkynna up
 ```
 
-4 services are installed:
+6 services are installed:
 * `Web_1` - The actual Tilkynna reporting service installed on port 9981
 * `PostgreSQL` Database installed on port 5432
-* `Keycloak` Authentication service installed on port 9191 and can be accessed by going to http://localhost:9191
+* `A3S PostgreSQL` Database installed on port 5478
+* `a3s-identity-server` and `a3s` Authentication services installed on port 80 and 8081 and can be accessed by going to http://localhost:80
 * `SFTP` - An SFTP server running on port 2222
 
 ### Credentials for PostgreSQL database
 * Password: postgres
 * Database: tilkynna
 
-### Credentials for Keycloak
-* Username: admin
-* Password: admin
+### Credentials for A3S
+* grant_type: password
+* username: tilkynna-admin
+* password: Password1#
+* client_id: tilkynna-test-client
+* client_secret: secret
+* scope: tilkynna
+
 
 ### Credentials for SFTP
 * Username: foo

@@ -22,10 +22,10 @@ services:
       #JAVA_OPTS: "-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=6002 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false"
     depends_on: 
       - postgresql
-      - keycloak
+      - a3s-identity-server
     command: ["./wait-for.sh", "postgresql:5432", "--", "Echo 'DB is up. Good to proceed' "]
   postgresql:
-    image: "postgres:10.7-alpine"
+    image: "postgres:11-alpine"
     restart: always
     command: "-c 'config_file=/etc/postgresql/postgresql.conf'"
     ports:
@@ -39,19 +39,75 @@ services:
       # - postgresVolume:/var/lib/postgresql/data
       # add log folder
       # - ./logs:/logs
-  keycloak:
-    image: "jboss/keycloak:4.7.0.Final"
-    ports:
-     - "9191:8080"
-    environment:
-      DB_VENDOR: h2
-      KEYCLOAK_USER: admin
-      KEYCLOAK_PASSWORD: admin
-      KEYCLOAK_IMPORT: "/tmp/tilkynna-realm.json"
-    volumes:
-      - ./tilkynna-realm.json:/tmp/tilkynna-realm.json
+
   sftp:
     image: atmoz/sftp:alpine
     ports:
         - "2222:22"
     command: foo:pass:::upload
+    
+
+  a3s-postgresql:
+    networks:
+      - tilkynna-quickstart    
+    image: "postgres:11-alpine"
+    restart: always
+    ports:
+      - "5478:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=identity_server
+      - POSTGRES_PASSWORD=postgres
+    
+  a3s:
+    networks:
+      - tilkynna-quickstart  
+    image: "grindrodbank/a3s"
+    restart: always
+    ports:
+      - 8081:80
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - FLYWAY_ENABLE=true
+      - DATABASE_SERVER=a3s-postgresql
+      - DATABASE_NAME=identity_server
+      - DATABASE_PORT=5432
+      - FLYWAY_USER=postgres
+      - FLYWAY_PASSWORD=postgres
+      - FLYWAY_CONNECTION_RETRIES=5
+    depends_on:
+      - a3s-postgresql    
+
+  a3s-identity-server:
+    #container_name: a3s-identity-server
+    networks:
+      - tilkynna-quickstart  
+    image: "grindrodbank/a3s-identity-server"
+    restart: always
+    ports:
+      - 80:80
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - FLYWAY_ENABLE=true
+      - DATABASE_SERVER=a3s-postgresql
+      - DATABASE_NAME=identity_server
+      - DATABASE_PORT=5432
+      - FLYWAY_USER=postgres
+      - FLYWAY_PASSWORD=postgres
+      - FLYWAY_CONNECTION_RETRIES=5
+    depends_on:
+      - a3s-postgresql
+
+  register-security-contract:
+    networks:
+      - tilkynna-quickstart
+    image: "endeveit/docker-jq"
+    volumes:
+      - ./scripts/:/scripts
+      - ../../doc/a3s-security-contract.yaml:/scripts/contract.yaml     
+    depends_on:
+      - a3s-identity-server   
+    command: sh -c '/scripts/wait-for.sh a3s-identity-server:80 -- /scripts/register-contract.sh '  
+    
+networks:
+  tilkynna-quickstart:

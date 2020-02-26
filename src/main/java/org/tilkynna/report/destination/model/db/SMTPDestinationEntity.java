@@ -42,7 +42,7 @@ public class SMTPDestinationEntity extends DestinationEntity {
     private String username;
 
     @Column(name = "password", nullable = false)
-    @ColumnTransformer(read = "_reports.pgp_sym_decrypt_bytea(password, current_setting('secret.key'))", write = "_reports.pgp_sym_encrypt_bytea(?, current_setting('secret.key'))")
+    @ColumnTransformer(read = "pgp_sym_decrypt_bytea(password, current_setting('secret.key'))", write = "pgp_sym_encrypt_bytea(?, current_setting('secret.key'))")
     @Type(type = "org.hibernate.type.BinaryType")
     private byte[] password;
 
@@ -86,11 +86,18 @@ public class SMTPDestinationEntity extends DestinationEntity {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) { return true; }
-        if (!super.equals(obj)) { return false; }
-        if (!(obj instanceof SMTPDestinationEntity)) { return false; }
+        if (this == obj) {
+            return true;
+        }
+        if (!super.equals(obj)) {
+            return false;
+        }
+        if (!(obj instanceof SMTPDestinationEntity)) {
+            return false;
+        }
         SMTPDestinationEntity other = (SMTPDestinationEntity) obj;
-        return Objects.equals(fromAddress, other.fromAddress) && Objects.equals(hash, other.hash) && Objects.equals(host, other.host) && Arrays.equals(password, other.password) && Objects.equals(port, other.port) && Objects.equals(username, other.username);
+        return Objects.equals(fromAddress, other.fromAddress) && Objects.equals(hash, other.hash) && Objects.equals(host, other.host) && Arrays.equals(password, other.password) && Objects.equals(port, other.port)
+                && Objects.equals(username, other.username);
     }
 
 }

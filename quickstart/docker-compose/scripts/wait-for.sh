@@ -5,7 +5,8 @@
 # License MIT: https://opensource.org/licenses/MIT
 # **************************************************
 #
-TIMEOUT=25
+
+TIMEOUT=15
 QUIET=0
 
 echoerr() {
@@ -82,3 +83,5 @@ if [ "$HOST" = "" -o "$PORT" = "" ]; then
 fi
 
 wait_for "$@"
+
+

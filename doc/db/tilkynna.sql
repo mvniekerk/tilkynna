@@ -1,5 +1,5 @@
 -- Database generated with pgModeler (PostgreSQL Database Modeler).
--- pgModeler  version: 0.9.2-alpha1
+-- pgModeler  version: 0.9.2-beta
 -- PostgreSQL version: 11.0
 -- Project Site: pgmodeler.io
 -- Model Author: ---
@@ -29,8 +29,8 @@ SET search_path TO pg_catalog,public,_reports;
 -- object: pgcrypto | type: EXTENSION --
 -- DROP EXTENSION IF EXISTS pgcrypto CASCADE;
 CREATE EXTENSION pgcrypto
-      WITH SCHEMA public
-      VERSION '1.3';
+WITH SCHEMA public
+VERSION '1.3';
 -- ddl-end --
 COMMENT ON EXTENSION pgcrypto IS 'cryptographic functions';
 -- ddl-end --
@@ -312,7 +312,7 @@ CREATE TABLE _reports.generated_report (
 
 );
 -- ddl-end --
-COMMENT ON COLUMN _reports.generated_report.requested_by IS 'The uuid of the users (in KeyCloak) logged in and requesting the report';
+COMMENT ON COLUMN _reports.generated_report.requested_by IS 'The uuid of the users (in A3S) logged in and requesting the report';
 -- ddl-end --
 COMMENT ON COLUMN _reports.generated_report.request_body IS 'JSON of the request body to be used for generating this report';
 -- ddl-end --

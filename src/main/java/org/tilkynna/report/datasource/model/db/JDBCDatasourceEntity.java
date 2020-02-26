@@ -35,7 +35,7 @@ public class JDBCDatasourceEntity extends DatasourceEntity {
     private String username;
 
     @Column(name = "password", nullable = false)
-    @ColumnTransformer(read = "_reports.pgp_sym_decrypt_bytea(password, current_setting('secret.key'))", write = "_reports.pgp_sym_encrypt_bytea(?, current_setting('secret.key'))")
+    @ColumnTransformer(read = "pgp_sym_decrypt_bytea(password, current_setting('secret.key'))", write = "pgp_sym_encrypt_bytea(?, current_setting('secret.key'))")
     @Type(type = "org.hibernate.type.BinaryType")
     private byte[] password;
 
@@ -61,9 +61,15 @@ public class JDBCDatasourceEntity extends DatasourceEntity {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) { return true; }
-        if (!super.equals(obj)) { return false; }
-        if (!(obj instanceof JDBCDatasourceEntity)) { return false; }
+        if (this == obj) {
+            return true;
+        }
+        if (!super.equals(obj)) {
+            return false;
+        }
+        if (!(obj instanceof JDBCDatasourceEntity)) {
+            return false;
+        }
         JDBCDatasourceEntity other = (JDBCDatasourceEntity) obj;
         return Objects.equals(dbUrl, other.dbUrl) && Objects.equals(driverClass, other.driverClass) && Objects.equals(hash, other.hash) && Arrays.equals(password, other.password) && Objects.equals(username, other.username);
     }

@@ -32,7 +32,7 @@ server:
 spring:
   datasource:
     initialization-mode: always
-    url: jdbc:tc:postgresql:10-alpine:///databasename?TC_INITSCRIPT=init_pg.sql
+    url: jdbc:tc:postgresql:11-alpine:///databasename?TC_INITSCRIPT=init_pg.sql
     driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
   flyway:
     enabled: true
@@ -61,7 +61,6 @@ rest:
   security:
     # This property toggles whether Oauth 2.0 based security is enabled. A 'disabled' value removes all security.
     enabled: false
-    issuerUri: "http://keycloak.local/auth/realms/Dokuti"
     apiMatcher: "/**"
     cors:
       allowedOrigins: "*"
@@ -73,11 +72,9 @@ rest:
 security:
   oauth2:
     resource:
-      id: dokuti
-      tokenInfoUri: ${rest.security.issuerUri}/protocol/openid-connect/token/introspect
-      userInfoUri: ${rest.security.issuerUri}/protocol/openid-connect/userinfo
+      id: tilkynna
       jwt:
-        keyValue: "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAse9KSL+ZuZTXdMgqmPyYSfox+v+W+olboYfDNuZNNDxgscK/uWNM3A/nJaN3xqGpmB37Thv27G17eUNBRToy+OmCsDymfeqTP+MGsgh+VOujkdFGQkOWzX02uQTVngPkyOaLY52fwZUsTvGXj4D+sci5N52/IpXf3SsnTCz0LW2d7+hP9ne6qZ6z7IHBAUHNTxU9Kzkg7DdIyy3JfACWnky40vFycglI21OQEOr22fYS5MZMbhGkHcrUE3f+OLZKGY+aI+ePDJi6onz7YiPpCEb2942S9PmVfL9vcEjp1RimCNxUWJIfSz5Wh6ghkcHngye2vaRK50neNk0WURG2LQIDAQAB\n-----END PUBLIC KEY-----"
+        keyValue: "-----BEGIN PUBLIC KEY-----\nMIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEA1fD6YzaIslie1AQpdyDYyrukqjo4/71G9Us++fDTLMOujuJBgDF2A0p1cvEpc8r3fzwJq2wxfJDXotRp9X/81jDv/uxyO7ifhGcAbxg/wVEz4YmQE5bXFM0IEMhU1VDE17i0CTiwe2WV6G69JSAm7xMChl284zSCZOhlALe25mBg0zkTfmcZIUdkloBsWe94FNsQ0IljLyRiwoEZO0Xrp91eUrUvQm6He3X716zIg+YUzoWk+KVNHuL+pk6Aefy1c+yFia57MTA384ORh8MiGRZ9YuM69uB6oPkFHkwFNWbDW9G+yzcpcXsc0BdQVwsZ9liHbkgRHGthbeC7euG3THEJkaZXAInr2mwcyaNHzCQIOo6cngNOU5S3pLnHNyEM1FG40AYhRj8/uwJ4e//uBbBOUvg7Fo5cnG4FOWLIN35sQUQvht30h+UmG/lb4ualkx/GkDOfyTwejqt2mTLWkblV3vekX7uI+h4M1lFebpAKF602r3qK80PNgPS56BwjGSxLhfllxhN6nhbjPZtaiTfFu0mFTHkRPEo7t2ThDBFMZ7EeA6Ot46MS1D/t+HwjlJ/vnZAH3RcdyUQgp4wJeCJQkd26XlaU5MT3jCFLMj1RLLVhif90gj2mCN+kO/wnSRH3jrrKL5nbgUJNL38D+1RVAfywEdeijIZCbvExC18CAwEAAQ==\n-----END PUBLIC KEY-----"
 
 # This setting exposes all the actuator routes, some of which expose sensitive info. Ensure that only the /health route is exposed
 # publically for readiness and liveness probes in non-dev environments.

@@ -13,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
@@ -28,6 +29,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -65,7 +67,9 @@ public class LookupTagsControllerGetEdgeCaseTests {
         MockitoAnnotations.initMocks(this);
 
         // Page request [number: 1, size 5, sort: tag: ASC]
-        Sort defaultSort = new Sort(Direction.ASC, "tag");
+       
+        Sort defaultSort = Sort.by(Arrays.asList(new Order(Direction.ASC, "tag")));
+        
         final PageRequest pr = PageRequest.of(Integer.parseInt(PAGE_NUMBER_STRING), Integer.parseInt(PAGE_SIZE_STRING), defaultSort);
 
         List<LookupTag> emptyLookupTags = new ArrayList<LookupTag>();

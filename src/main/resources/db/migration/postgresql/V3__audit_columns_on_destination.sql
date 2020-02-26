@@ -39,4 +39,4 @@ insert into  _reports.destination
 	security_protocol,	
     downloadable,
 	is_active, __updated_on, __updated_by)
-values ('STREAM', 'STREAM', 'STREAM', 'ssl', true, true, now(), gen_random_uuid()); -- TODO : UUID here needs to map back to a keycloak user :-( 
+values ('STREAM', 'STREAM', 'STREAM', 'ssl', true, true, now(), gen_random_uuid()); -- TODO : UUID here needs to map back to a A3S user :-( 

@@ -26,17 +26,6 @@ ALTER SCHEMA _reports OWNER TO postgres;
 --SET search_path TO pg_catalog,public,_reports;
 -- ddl-end --
 
-CREATE EXTENSION IF NOT EXISTS "pgcrypto";    
-
--- object: pgcrypto | type: EXTENSION --
--- DROP EXTENSION IF EXISTS pgcrypto CASCADE;
---CREATE EXTENSION pgcrypto
---      WITH SCHEMA public
---      VERSION '1.3';
--- ddl-end --
-COMMENT ON EXTENSION pgcrypto IS 'cryptographic functions';
--- ddl-end --
-
 -- object: _reports.template | type: TABLE --
 -- DROP TABLE IF EXISTS _reports.template CASCADE;
 CREATE TABLE _reports.template (
@@ -307,7 +296,7 @@ CREATE TABLE _reports.generated_report (
 
 );
 -- ddl-end --
-COMMENT ON COLUMN _reports.generated_report.requested_by IS 'The uuid of the users (in KeyCloak) logged in and requesting the report';
+COMMENT ON COLUMN _reports.generated_report.requested_by IS 'The uuid of the users (in A3S) logged in and requesting the report';
 -- ddl-end --
 COMMENT ON COLUMN _reports.generated_report.request_body IS 'JSON of the request body to be used for generating this report';
 -- ddl-end --
